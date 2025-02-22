@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prova de suficiência</title>
+    <!-- BootsTrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- icones da web, Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/script.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <!-- barra de navegação -->
+        <nav class="nav nav-pills mb-3">
+            <a class="nav-link active" href="#" onclick="showSection('insert')">
+                <i class="fas fa-plus"></i> Inserir
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('list')">
+                Listar
+            </a>
+            <a class="nav-link" href="#" onclick="showSection('delete')">
+                Excluir
+            </a>
+            <button class="btn">teste</button>
+        </nav>
+
+        <!-- formulario -->
+        <div id="insert" class="card p-3">
+            <h3>Inserir Novo Item</h3>
+            <input type="text" id="title" class="form-control mb-2" placeholder="Título">
+            <input type="url" id="url" class="form-control mb-2" placeholder="URL da Imagem">
+            <button class="btn btn-primary" onclick="addItem()">Adicionar</button>
+        </div>
+
+        <!-- exibir -->
+        <div id="list" class="card p-3 d-none">
+            <h3>Lista de Itens</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Imagem</th>
+                    </tr>
+                </thead>
+                <tbody id="photoTable"></tbody>
+            </table>
+            <button class="btn btn-secondary" onclick="loadPhotos()">Carregar</button>
+        </div>
+
+        <!-- excluir -->
+        <div id="delete" class="card p-3 d-none">
+            <h3>Excluir Item</h3>
+            <input type="number" id="deleteId" class="form-control mb-2" placeholder="ID para excluir">
+            <button class="btn btn-danger" onclick="deleteItem()">Excluir</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,34 +8,40 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- icones da web, Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- css -->
+    <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js"></script>
 </head>
-<body>
+<body class="bg-dark">
     <div class="container mt-4">
         <!-- barra de navegação -->
         <nav class="nav nav-pills mb-3">
-            <a class="nav-link active" href="#" onclick="showSection('insert')">
+            <a class="nav-link active" href="#" onclick="mostrarSecao('inserir')">
                 <i class="fas fa-plus"></i> Inserir
             </a>
-            <a class="nav-link" href="#" onclick="showSection('list')">
-                Listar
+            <a class="nav-link" href="#" onclick="mostrarSecao('listar')">
+                <i class="fas fa-list-ul"></i> Listar
             </a>
-            <a class="nav-link" href="#" onclick="showSection('delete')">
-                Excluir
+            <a class="nav-link" href="#" onclick="mostrarSecao('alterar')">
+                <i class="fas fa-pen"></i> Alterar
             </a>
-            <button class="btn">teste</button>
+            <a class="nav-link" href="#" onclick="mostrarSecao('deletar')">
+                <i class="fas fa-trash"></i> Excluir
+            </a>
         </nav>
 
-        <!-- formulario -->
-        <div id="insert" class="card p-3">
+        <div id="mensagem" class="alert d-none mt-2"></div>
+
+        <!-- inserir -->
+        <div id="inserir" class="card p-3 bg-black text-white">
             <h3>Inserir Novo Item</h3>
-            <input type="text" id="title" class="form-control mb-2" placeholder="Título">
+            <input type="text" id="titulo" class="form-control mb-2" placeholder="Título">
             <input type="url" id="url" class="form-control mb-2" placeholder="URL da Imagem">
             <button class="btn btn-primary" onclick="addItem()">Adicionar</button>
         </div>
 
         <!-- exibir -->
-        <div id="list" class="card p-3 d-none">
+        <div id="listar" class="card p-3 d-none bg-black text-white">
             <h3>Lista de Itens</h3>
             <table class="table">
                 <thead>
@@ -45,16 +51,24 @@
                         <th>Imagem</th>
                     </tr>
                 </thead>
-                <tbody id="photoTable"></tbody>
+                <tbody id="tabelaFotos"></tbody>
             </table>
-            <button class="btn btn-secondary" onclick="loadPhotos()">Carregar</button>
+        </div>
+
+        <!-- alterar -->
+        <div id="alterar" class="card p-3 d-none bg-black text-white">
+            <h3>Alterar Item</h3>
+            <input type="number" id="alterarId" class="form-control mb-2" placeholder="ID para alterar">
+            <input type="text" id="tituloAlterar" class="form-control mb-2" placeholder="Título">
+            <input type="url" id="urlAlterar" class="form-control mb-2" placeholder="URL da Imagem">
+            <button class="btn btn-secondary" onclick="alterarItem()">Alterar</button>
         </div>
 
         <!-- excluir -->
-        <div id="delete" class="card p-3 d-none">
+        <div id="deletar" class="card p-3 d-none bg-black text-white">
             <h3>Excluir Item</h3>
             <input type="number" id="deleteId" class="form-control mb-2" placeholder="ID para excluir">
-            <button class="btn btn-danger" onclick="deleteItem()">Excluir</button>
+            <button class="btn btn-danger" onclick="deletarItem()">Excluir</button>
         </div>
     </div>
 </body>

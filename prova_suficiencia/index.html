@@ -16,7 +16,7 @@
     <div class="container mt-4">
         <!-- barra de navegação -->
         <nav class="nav nav-pills mb-3">
-            <a class="nav-link active" href="#" onclick="mostrarSecao('inserir')">
+            <a class="nav-link active bg-success" href="#" onclick="mostrarSecao('inserir')">
                 <i class="fas fa-plus"></i> Inserir
             </a>
             <a class="nav-link" href="#" onclick="mostrarSecao('listar')">
@@ -37,7 +37,7 @@
             <h3>Inserir Novo Item</h3>
             <input type="text" id="titulo" class="form-control mb-2" placeholder="Título">
             <input type="url" id="url" class="form-control mb-2" placeholder="URL da Imagem">
-            <button class="btn btn-primary" onclick="addItem()">Adicionar</button>
+            <button class="btn btn-success" onclick="addItem()">Adicionar</button>
         </div>
 
         <!-- exibir -->
@@ -49,6 +49,7 @@
                         <th>ID</th>
                         <th>Título</th>
                         <th>Imagem</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="tabelaFotos"></tbody>
@@ -61,7 +62,7 @@
             <input type="number" id="alterarId" class="form-control mb-2" placeholder="ID para alterar">
             <input type="text" id="tituloAlterar" class="form-control mb-2" placeholder="Título">
             <input type="url" id="urlAlterar" class="form-control mb-2" placeholder="URL da Imagem">
-            <button class="btn btn-secondary" onclick="alterarItem()">Alterar</button>
+            <button class="btn btn-warning" onclick="alterarItem()">Alterar</button>
         </div>
 
         <!-- excluir -->

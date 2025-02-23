@@ -3,21 +3,37 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function mostrarSecao(secaoId) {
-    document.getElementById('inserir').classList.add('d-none');
-    document.getElementById('listar').classList.add('d-none');
-    document.getElementById('alterar').classList.add('d-none');
-    document.getElementById('deletar').classList.add('d-none');
+    // faz com que todas a seções fiquem invisiveis
+    document.querySelectorAll('.card').forEach(secao => secao.classList.add('d-none'));
 
     // exibi a escolhida
     document.getElementById(secaoId).classList.remove('d-none');
 
-    // atualiza a classe active no menu
+    // atualiza pelos botões da navegação
     document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
+        link.classList.remove('active', 'bg-success', 'bg-secondary', 'bg-warning', 'bg-danger');
     });
     
-    // ativa o link clicado
-    event.currentTarget.classList.add('active');
+    // evento ao clicar pelo botões da listagem
+    let linkAtivo = document.querySelector(`.nav-link[href="#"][onclick="mostrarSecao('${secaoId}')"]`);
+    if (linkAtivo) {
+        linkAtivo.classList.add('active');
+
+        switch (secaoId) {
+            case "inserir":
+                linkAtivo.classList.add('bg-success');
+                break;
+            case "listar":
+                linkAtivo.classList.add('bg-secondary');
+                break;
+            case "alterar":
+                linkAtivo.classList.add('bg-warning');
+                break;
+            case "deletar":
+                linkAtivo.classList.add('bg-danger');
+                break;
+        }
+    }
 }
 
 function exibirMensagem(texto, tipo) {
@@ -93,7 +109,19 @@ async function carregarListaItens() {
     tabela.innerHTML = "";
 
     items.forEach(item => {
-        const row = `<tr><td>${item.id}</td><td>${item.title}</td><td><img src="${item.url}" width="50"></td></tr>`;
+        const row = `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.title}</td>
+                        <td><img src="${item.url}" width="50"></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="preencherFormularioEdicao(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deletarItemDireto(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>`;
         tabela.innerHTML += row;
     });
 }
@@ -166,6 +194,24 @@ async function deletarItem() {
     } else {
         exibirMensagem("Id não encontrado!", "danger");
     }
+}
+
+function preencherFormularioEdicao(id) {
+    let items = JSON.parse(localStorage.getItem('fotos')) || [];
+    let item = items.find(item => item.id === id);
+
+    if (item) {
+        document.getElementById('alterarId').value = item.id;
+        document.getElementById('tituloAlterar').value = item.title;
+        document.getElementById('urlAlterar').value = item.url;
+        mostrarSecao('alterar');
+    }
+}
+
+async function deletarItemDireto(id) {
+    let items = JSON.parse(localStorage.getItem('fotos')) || [];
+    document.getElementById('deleteId').value = id
+    deletarItem();
 }
 
 async function getJsonAPI() {

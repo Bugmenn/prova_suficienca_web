@@ -92,6 +92,11 @@ async function addItem() {
             headers: { 'Content-Type': 'application/json' }
         });
 
+        if (!response.ok) {
+            const errorRequest = await response.json();
+            throw new Error(errorRequest.message || `Erro ${response.status}: Falha ao adicionar item.`);
+        }
+
         // const data = await response.json();
         items.push(novaFoto);
         localStorage.setItem('fotos', JSON.stringify(items));
@@ -99,7 +104,7 @@ async function addItem() {
         await limparInputs();
         exibirMensagem("Item adicionado com sucesso!", "success");
     } catch (error) {
-        exibirMensagem("Erro ao adicionar item", "danger");
+        exibirMensagem(`Erro ao adicionar item: ${error.message}`, "danger");
     }
 }
 
@@ -114,10 +119,10 @@ async function carregarListaItens() {
                         <td>${item.title}</td>
                         <td><img src="${item.url}" width="50"></td>
                         <td>
-                            <button class="btn btn-warning btn-sm" onclick="preencherFormularioEdicao(${item.id})">
+                            <button class="btn btn-warning btn-sm" title="Editar" onclick="preencherFormularioEdicao(${item.id})">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="deletarItemDireto(${item.id})">
+                            <button class="btn btn-danger btn-sm" title="Excluir" onclick="deletarItemDireto(${item.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
@@ -152,13 +157,19 @@ async function alterarItem() {
                 headers: { 'Content-Type': 'application/json' }
             });
 
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Erro ${response.status}: Falha ao atualizar item.`);
+            }
+
             items[index] = fotoAtualizada;
             localStorage.setItem('fotos', JSON.stringify(items));
             await carregarListaItens();
-            await limparInputs();
             exibirMensagem("Item atualizado com sucesso!", "success");
         } catch (error) {
-            exibirMensagem("Erro ao atualizar item!", "danger");
+            exibirMensagem(`Erro ao atualizar item: ${error.message}`, "danger");
+        } finally {
+            await limparInputs();
         }
     } else {
         exibirMensagem("Id não encontrado!", "danger");
@@ -183,13 +194,19 @@ async function deletarItem() {
                 method: 'DELETE'
             });
 
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Erro ${response.status}: Falha ao excluir item.`);
+            }
+
             items = items.filter(item => item.id !== id);
             localStorage.setItem('fotos', JSON.stringify(items));
             await carregarListaItens();
-            await limparInputs();
             exibirMensagem("Item excluído com sucesso!", "success");
         } catch (error) {
-            exibirMensagem("Erro ao excluir!", "danger");
+            exibirMensagem(`Erro ao excluir item: ${error.message}`, "danger");
+        } finally {
+            await limparInputs();
         }
     } else {
         exibirMensagem("Id não encontrado!", "danger");
@@ -215,15 +232,24 @@ async function deletarItemDireto(id) {
 }
 
 async function getJsonAPI() {
-    // pega as informações da api
-    const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=10');
-    const fotosWeb = await response.json();
+    try {
+        // pega as informações da api
+        const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=10');
 
-    const localFotos = JSON.parse(localStorage.getItem('fotos')) || [];
-    
-    const todasFotos = localFotos.length === 0 ? [...fotosWeb] : [...localFotos];
+        if (!response.ok) {
+            throw new Error(`Erro ${response.status}: Falha ao carregar dados da API.`);
+        }
 
-    localStorage.setItem('fotos', JSON.stringify(todasFotos));
+        const fotosWeb = await response.json();
+        const localFotos = JSON.parse(localStorage.getItem('fotos')) || [];
 
-    await carregarListaItens();
+        // Se o LocalStorage estiver vazio, usamos os dados da API, caso contrário, mantemos os locais
+        const todasFotos = localFotos.length === 0 ? [...fotosWeb] : [...localFotos];
+
+        localStorage.setItem('fotos', JSON.stringify(todasFotos));
+
+        await carregarListaItens();
+    } catch (error) {
+        exibirMensagem(`Erro ao carregar dados: ${error.message}`, "danger");
+    }
 }

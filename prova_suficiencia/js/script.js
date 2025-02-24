@@ -151,7 +151,7 @@ async function alterarItem() {
         const fotoAtualizada = { ...items[index], title, url };
 
         try {
-            await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
+            const response = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(fotoAtualizada),
                 headers: { 'Content-Type': 'application/json' }
@@ -190,7 +190,7 @@ async function deletarItem() {
 
     if (index !== -1) {
         try {
-            await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
+            const response = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
                 method: 'DELETE'
             });
 

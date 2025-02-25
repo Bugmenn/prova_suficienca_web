@@ -14,7 +14,7 @@ function mostrarSecao(secaoId) {
         link.classList.remove('active', 'bg-success', 'bg-secondary', 'bg-warning', 'bg-danger');
     });
     
-    // evento ao clicar pelo botões da listagem
+    // evento para adicionar cor de fundo da navegação
     let linkAtivo = document.querySelector(`.nav-link[href="#"][onclick="mostrarSecao('${secaoId}')"]`);
     if (linkAtivo) {
         linkAtivo.classList.add('active');

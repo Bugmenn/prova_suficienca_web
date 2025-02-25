@@ -19,8 +19,20 @@ function mostrarSecao(secaoId) {
     if (linkAtivo) {
         linkAtivo.classList.add('active');
 
-        if (secaoId === "alterar")
-            linkAtivo.classList.add('bg-warning');
+        switch (secaoId) {
+            case "inserir":
+                linkAtivo.classList.add('bg-success');
+                break;
+            case "listar":
+                linkAtivo.classList.add('bg-secondary');
+                break;
+            case "alterar":
+                linkAtivo.classList.add('bg-warning');
+                break;
+            case "deletar":
+                linkAtivo.classList.add('bg-danger');
+                break;
+        }
     }
 }
 

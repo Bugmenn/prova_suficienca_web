@@ -12,3 +12,9 @@ table th, table td {
     background-color: black !important;
     color: white !important;
 }
+
+td {
+    word-break: break-word;
+    white-space: normal;
+    max-width: 250px;
+}

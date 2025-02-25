@@ -13,9 +13,9 @@
     <script src="js/script.js"></script>
 </head>
 <body class="bg-dark">
-    <div class="container mt-4">
+    <div class="container mt-4 px-4" style="max-width: 900px;">
         <!-- barra de navegação -->
-        <nav class="nav nav-pills mb-3">
+        <nav class="nav nav-pills mb-3 justify-content-center">
             <a class="nav-link active bg-success" href="#" onclick="mostrarSecao('inserir')">
                 <i class="fas fa-plus"></i> Inserir
             </a>
@@ -43,7 +43,8 @@
         <!-- exibir -->
         <div id="listar" class="card p-3 d-none bg-black text-white">
             <h3>Lista de Itens</h3>
-            <table class="table">
+            <input type="text" id="pesquisa" class="form-control mb-3" placeholder="Pesquisar pelo título" oninput="carregarListaItens()">
+            <table class="table table-dark table-striped">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -62,7 +63,7 @@
             <input type="number" id="alterarId" class="form-control mb-2" placeholder="Id para alterar">
             <input type="text" id="tituloAlterar" class="form-control mb-2" placeholder="Título">
             <input type="url" id="urlAlterar" class="form-control mb-2" placeholder="URL da Imagem">
-            <button class="btn btn-warning" onclick="alterarItem()">Alterar</button>
+            <button class="btn btn-warning text-white" onclick="alterarItem()">Alterar</button>
         </div>
 
         <!-- excluir -->

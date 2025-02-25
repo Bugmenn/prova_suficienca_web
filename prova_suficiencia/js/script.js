@@ -37,14 +37,14 @@ function mostrarSecao(secaoId) {
 }
 
 function exibirMensagem(texto, tipo) {
-    let msgDiv = document.getElementById("mensagem");
-    msgDiv.textContent = texto;
-    msgDiv.className = `alert alert-${tipo} mt-2`;
-    msgDiv.classList.remove("d-none");
+    let mensagem = document.getElementById("mensagem");
+    mensagem.textContent = texto;
+    mensagem.className = `alert alert-${tipo} mt-2`;
+    mensagem.classList.remove("d-none");
 
     // esconde mensagem depois de 3 segundos
     setTimeout(() => {
-        msgDiv.classList.add("d-none");
+        mensagem.classList.add("d-none");
     }, 3000);
 }
 
@@ -86,15 +86,15 @@ async function addItem() {
     };
 
     try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/photos', {
+        const request = await fetch('https://jsonplaceholder.typicode.com/photos', {
             method: 'POST',
             body: JSON.stringify(novaFoto),
             headers: { 'Content-Type': 'application/json' }
         });
 
-        if (!response.ok) {
-            const errorRequest = await response.json();
-            throw new Error(errorRequest.message || `Erro ${response.status}: Falha ao adicionar item.`);
+        if (!request.ok) {
+            const errorRequest = await request.json();
+            throw new Error(errorRequest.message || `Erro ${request.status}: Falha ao adicionar item.`);
         }
 
         // const data = await response.json();
@@ -111,6 +111,17 @@ async function addItem() {
 async function carregarListaItens() {
     let items = JSON.parse(localStorage.getItem('fotos'));
     let tabela = document.getElementById('tabelaFotos');
+    let pesquisa = document.getElementById("pesquisa").value.toLowerCase();
+
+    if (pesquisa.length !== 0) {
+        items = items.filter(item => item.title.toLowerCase().includes(pesquisa));
+
+        if (items.length === 0) {
+            tabela.innerHTML = `<tr><td colspan="4" class="text-center text-warning">Nenhum item encontrado</td></tr>`;
+            return;
+        }
+    }
+
     tabela.innerHTML = "";
 
     items.forEach(item => {
@@ -120,7 +131,7 @@ async function carregarListaItens() {
                         <td><img src="${item.url}" width="50"></td>
                         <td>
                             <button class="btn btn-warning btn-sm" title="Editar" onclick="preencherFormularioEdicao(${item.id})">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-edit text-white"></i>
                             </button>
                             <button class="btn btn-danger btn-sm" title="Excluir" onclick="deletarItemDireto(${item.id})">
                                 <i class="fas fa-trash"></i>
@@ -151,15 +162,15 @@ async function alterarItem() {
         const fotoAtualizada = { ...items[index], title, url };
 
         try {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
+            const request = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(fotoAtualizada),
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `Erro ${response.status}: Falha ao atualizar item.`);
+            if (!request.ok) {
+                const errorData = await request.json();
+                throw new Error(errorData.message || `Erro ${request.status}: Falha ao atualizar item.`);
             }
 
             items[index] = fotoAtualizada;
@@ -190,13 +201,13 @@ async function deletarItem() {
 
     if (index !== -1) {
         try {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
+            const request = await fetch(`https://jsonplaceholder.typicode.com/photos/${id}`, {
                 method: 'DELETE'
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `Erro ${response.status}: Falha ao excluir item.`);
+            if (!request.ok) {
+                const errorData = await request.json();
+                throw new Error(errorData.message || `Erro ${request.status}: Falha ao excluir item.`);
             }
 
             items = items.filter(item => item.id !== id);
@@ -226,7 +237,6 @@ function preencherFormularioEdicao(id) {
 }
 
 async function deletarItemDireto(id) {
-    let items = JSON.parse(localStorage.getItem('fotos')) || [];
     document.getElementById('deleteId').value = id
     deletarItem();
 }
@@ -234,16 +244,15 @@ async function deletarItemDireto(id) {
 async function getJsonAPI() {
     try {
         // pega as informações da api
-        const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=10');
+        const request = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=10');
 
-        if (!response.ok) {
-            throw new Error(`Erro ${response.status}: Falha ao carregar dados da API.`);
+        if (!request.ok) {
+            throw new Error(`Erro ${request.status}: Falha ao carregar dados da API.`);
         }
 
-        const fotosWeb = await response.json();
+        const fotosWeb = await request.json();
         const localFotos = JSON.parse(localStorage.getItem('fotos')) || [];
 
-        // Se o LocalStorage estiver vazio, usamos os dados da API, caso contrário, mantemos os locais
         const todasFotos = localFotos.length === 0 ? [...fotosWeb] : [...localFotos];
 
         localStorage.setItem('fotos', JSON.stringify(todasFotos));
